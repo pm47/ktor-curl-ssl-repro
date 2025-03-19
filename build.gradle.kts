@@ -9,14 +9,18 @@ val arch = System.getProperty("os.arch")
 
 kotlin {
 
-    jvm()
-
     fun KotlinNativeTarget.configureBinaries() {
         binaries {
             executable {
                 entryPoint = "org.example.ktor.main"
                 optimized = false // without this, release mode throws 'Index 0 out of bounds for length 0' in StaticInitializersOptimization.kt
             }
+        }
+    }
+
+    if (currentOs.isWindows) {
+        mingwX64 {
+            configureBinaries()
         }
     }
 
@@ -29,6 +33,15 @@ kotlin {
         }
     }
 
+    if (currentOs.isMacOsX) {
+        macosX64 {
+            configureBinaries()
+        }
+        macosArm64 {
+            configureBinaries()
+        }
+    }
+
     sourceSets {
         commonMain {
             dependencies {
@@ -37,18 +50,12 @@ kotlin {
                 implementation("io.ktor:ktor-client-content-negotiation:${libs.versions.ktor.get()}")
                 implementation("io.ktor:ktor-client-auth:${libs.versions.ktor.get()}")
                 implementation("io.ktor:ktor-client-json:${libs.versions.ktor.get()}")
+                implementation("io.ktor:ktor-client-curl:${libs.versions.ktor.get()}")
             }
         }
-        jvmMain {
+        nativeMain {
             dependencies {
-                api("io.ktor:ktor-client-okhttp:${libs.versions.ktor.get()}")
-            }
-        }
-        if (currentOs.isLinux) {
-            linuxMain {
-                dependencies {
-                    implementation("io.ktor:ktor-client-curl:${libs.versions.ktor.get()}")
-                }
+                implementation("io.ktor:ktor-client-curl:${libs.versions.ktor.get()}")
             }
         }
     }
