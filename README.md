@@ -13,8 +13,11 @@ Usage:
 ./ktor-curl-ssl-repro.exe
 
 # set curl.engine.caInfo
-./ktor-curl-ssl-repro.exe info /path/to/bundle.crt
+./ktor-curl-ssl-repro.exe caInfo=/path/to/bundle.crt
 
 # set curl.engine.caPath
-./ktor-curl-ssl-repro.exe path /path/to/certs/dir
+./ktor-curl-ssl-repro.exe caPath=/path/to/certs/dir
+
+# set curl.engine.caInfo and curl.engine.caPath
+./ktor-curl-ssl-repro.exe caInfo=/path/to/bundle.crt caPath=/path/to/certs/dir
 ```
